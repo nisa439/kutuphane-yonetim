@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitap Listesi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📚 Kitap Listesi</h2>
+            <div>
+                <a href="/kitap-ekle" class="btn btn-success">➕ Yeni Kitap Ekle</a>
+                <a href="/" class="btn btn-secondary">🏠 Ana Sayfa</a>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Başlık</th>
+                        <th>Yazar</th>
+                        <th>Kategori</th>
+                        <th>Sayfa Sayısı</th>
+                        <th>Yayın Tarihi</th>
+                        <th>Okundu mu?</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="kitap : ${kitaplar}">
+                        <td th:text="${kitap.id}"></td>
+                        <td th:text="${kitap.baslik}"></td>
+                        <td th:text="${kitap.yazar}"></td>
+                        <td th:text="${kitap.kategori}"></td>
+                        <td th:text="${kitap.sayfaSayisi}"></td>
+                        <td th:text="${kitap.yayinTarihi}"></td>
+                        <td>
+                            <span th:if="${kitap.okundu}" class="badge bg-success">✅ Evet</span>
+                            <span th:unless="${kitap.okundu}" class="badge bg-warning">⏳ Hayır</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/kitap-sil/{id}(id=${kitap.id})}" 
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Bu kitabı silmek istediğinizden emin misiniz?')">
+                                🗑️ Sil
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div th:if="${#lists.isEmpty(kitaplar)}" class="alert alert-info text-center">
+            <h4>📭 Henüz hiç kitap eklenmemiş!</h4>
+            <p>İlk kitabınızı eklemek için <a href="/kitap-ekle">buraya tıklayın</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
