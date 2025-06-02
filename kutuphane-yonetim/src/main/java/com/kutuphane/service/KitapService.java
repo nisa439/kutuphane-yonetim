@@ -1,12 +1,10 @@
 package com.kutuphane.service;
-
 import com.kutuphane.model.Kitap;
 import com.kutuphane.repository.KitapRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class KitapService {
     
@@ -15,7 +13,9 @@ public class KitapService {
     
     // Tüm kitapları getir
     public List<Kitap> tumKitaplariGetir() {
-        return kitapRepository.findAll();
+        List<Kitap> kitaplar = kitapRepository.findAll();
+        System.out.println("Service'den dönen kitap sayısı: " + kitaplar.size());
+        return kitaplar;
     }
     
     // ID'ye göre kitap getir

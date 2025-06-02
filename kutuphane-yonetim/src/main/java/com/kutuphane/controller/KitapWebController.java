@@ -1,15 +1,12 @@
 package com.kutuphane.controller;
-
 import com.kutuphane.model.Kitap;
 import com.kutuphane.service.KitapService;
-
+import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 @Controller
 public class KitapWebController {
     
@@ -27,7 +24,9 @@ public class KitapWebController {
     // Kitap listesi sayfası
     @GetMapping("/kitaplar")
     public String kitapListesi(Model model) {
-        model.addAttribute("kitaplar", kitapService.tumKitaplariGetir());
+        List<Kitap> kitaplar = kitapService.tumKitaplariGetir();
+        System.out.println("Controller'a gelen kitap sayısı: " + kitaplar.size());
+        model.addAttribute("kitaplar", kitaplar);
         return "kitap-listesi";
     }
     
@@ -60,7 +59,6 @@ public class KitapWebController {
         }
         return "redirect:/kitaplar";
     }
-
     // Kitap güncelleme işlemi
     @PostMapping("/kitap-guncelle/{id}")
     public String kitapGuncelle(@PathVariable Long id, @ModelAttribute Kitap kitap) {

@@ -2,61 +2,376 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitap Listesi</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0;
+        }
+
+        .modern-btn {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 5px;
+        }
+
+        .btn-add {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .btn-home {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #495057;
+        }
+
+        .btn-delete {
+            background: var(--danger-gradient);
+            color: white;
+            padding: 5px 12px;
+            font-size: 0.85rem;
+        }
+
+        .modern-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            color: white;
+        }
+
+        .btn-home:hover {
+            color: #495057;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .modern-table {
+            margin-bottom: 0;
+        }
+
+        .modern-table thead th {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 1.2rem 1rem;
+            font-size: 0.95rem;
+        }
+
+        .modern-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .modern-table tbody tr:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            transform: scale(1.01);
+        }
+
+        .modern-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-read {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: white;
+        }
+
+        .badge-unread {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            color: #2d3436;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .category-badge {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .book-title {
+            font-weight: 600;
+            color: #2d3436;
+        }
+
+        .author-name {
+            color: #636e72;
+            font-style: italic;
+        }
+
+        .page-count {
+            font-weight: 500;
+            color: #74b9ff;
+        }
+
+        .container-custom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .modern-btn {
+                width: 100%;
+                margin: 5px 0;
+                justify-content: center;
+            }
+            
+            .table-responsive {
+                border-radius: 15px;
+            }
+            
+            .modern-table thead th {
+                font-size: 0.8rem;
+                padding: 0.8rem 0.5rem;
+            }
+            
+            .modern-table tbody td {
+                padding: 0.8rem 0.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .container-custom {
+                padding: 1rem;
+            }
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>📚 Kitap Listesi</h2>
-            <div>
-                <a href="/kitap-ekle" class="btn btn-success">➕ Yeni Kitap Ekle</a>
-                <a href="/" class="btn btn-secondary">🏠 Ana Sayfa</a>
+    <div class="container-custom">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <h1 class="page-title">
+                    <i class="fas fa-book me-2"></i>
+                    Kitap Listesi
+                </h1>
+                <div class="mt-3 mt-md-0">
+                    <a href="/kitap-ekle" class="modern-btn btn-add">
+                        <i class="fas fa-plus"></i>
+                        Yeni Kitap Ekle
+                    </a>
+                    <a href="/" class="modern-btn btn-home">
+                        <i class="fas fa-home"></i>
+                        Ana Sayfa
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control search-input border-start-0" 
+                               placeholder="Kitap adı veya yazar adı ile ara..." id="searchInput">
+                    </div>
+                </div>
+                <div class="col-md-4 mt-3 mt-md-0">
+                    <select class="form-select search-input" id="categoryFilter">
+                        <option value="">Tüm Kategoriler</option>
+                        <option value="Roman">Roman</option>
+                        <option value="Bilim Kurgu">Bilim Kurgu</option>
+                        <option value="Tarih">Tarih</option>
+                        <option value="Biyografi">Biyografi</option>
+                        <option value="Felsefe">Felsefe</option>
+                        <option value="Teknoloji">Teknoloji</option>
+                        <option value="Çocuk">Çocuk</option>
+                        <option value="Diğer">Diğer</option>
+                    </select>
+                </div>
             </div>
         </div>
         
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Başlık</th>
-                        <th>Yazar</th>
-                        <th>Kategori</th>
-                        <th>Sayfa Sayısı</th>
-                        <th>Yayın Tarihi</th>
-                        <th>Okundu mu?</th>
-                        <th>İşlemler</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="kitap : ${kitaplar}">
-                        <td th:text="${kitap.id}"></td>
-                        <td th:text="${kitap.baslik}"></td>
-                        <td th:text="${kitap.yazar}"></td>
-                        <td th:text="${kitap.kategori}"></td>
-                        <td th:text="${kitap.sayfaSayisi}"></td>
-                        <td th:text="${kitap.yayinTarihi}"></td>
-                        <td>
-                            <span th:if="${kitap.okundu}" class="badge bg-success">✅ Evet</span>
-                            <span th:unless="${kitap.okundu}" class="badge bg-warning">⏳ Hayır</span>
-                        </td>
-                        <td>
-                            <a th:href="@{/kitap-sil/{id}(id=${kitap.id})}" 
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('Bu kitabı silmek istediğinizden emin misiniz?')">
-                                🗑️ Sil
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Table Section -->
+        <div class="table-container" th:if="${kitaplar != null and !kitaplar.empty}">
+            <div class="table-responsive">
+                <table class="table modern-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Kitap Bilgileri</th>
+                            <th>Kategori</th>
+                            <th>Sayfa</th>
+                            <th>Yayın Tarihi</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTable">
+                        <tr th:each="kitap : ${kitaplar}" class="book-row">
+                            <td class="fw-bold" th:text="${kitap.id}"></td>
+                            <td>
+                                <div class="book-title" th:text="${kitap.baslik}"></div>
+                                <div class="author-name" th:text="'Yazar: ' + ${kitap.yazar}"></div>
+                            </td>
+                            <td>
+                                <span class="category-badge" th:if="${kitap.kategori}" th:text="${kitap.kategori}"></span>
+                                <span class="text-muted" th:unless="${kitap.kategori}">-</span>
+                            </td>
+                            <td>
+                                <span class="page-count" th:if="${kitap.sayfaSayisi}" th:text="${kitap.sayfaSayisi} + ' sayfa'"></span>
+                                <span class="text-muted" th:unless="${kitap.sayfaSayisi}">-</span>
+                            </td>
+                            <td>
+                                <span th:if="${kitap.yayinTarihi}" th:text="${kitap.yayinTarihi}"></span>
+                                <span class="text-muted" th:unless="${kitap.yayinTarihi}">-</span>
+                            </td>
+                            <td>
+                                <span th:if="${kitap.okundu}" class="status-badge badge-read">
+                                    <i class="fas fa-check"></i>
+                                    Okundu
+                                </span>
+                                <span th:unless="${kitap.okundu}" class="status-badge badge-unread">
+                                    <i class="fas fa-clock"></i>
+                                    Okunmadı
+                                </span>
+                            </td>
+                            <td>
+                                <a th:href="@{'/kitap-sil/' + ${kitap.id}}" 
+                                   class="modern-btn btn-delete"
+                                   onclick="return confirm('Bu kitabı silmek istediğinizden emin misiniz?')">
+                                    <i class="fas fa-trash"></i>
+                                    Sil
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         
-        <div th:if="${#lists.isEmpty(kitaplar)}" class="alert alert-info text-center">
-            <h4>📭 Henüz hiç kitap eklenmemiş!</h4>
-            <p>İlk kitabınızı eklemek için <a href="/kitap-ekle">buraya tıklayın</a>.</p>
+        <!-- Empty State -->
+        <div th:if="${kitaplar == null or kitaplar.empty}" class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h3 class="mb-3">Henüz hiç kitap eklenmemiş!</h3>
+            <p class="text-muted mb-4">İlk kitabınızı ekleyerek kütüphanenizi oluşturmaya başlayın.</p>
+            <a href="/kitap-ekle" class="modern-btn btn-add">
+                <i class="fas fa-plus"></i>
+                İlk Kitabı Ekle
+            </a>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', filterBooks);
+        document.getElementById('categoryFilter').addEventListener('change', filterBooks);
+
+        function filterBooks() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const rows = document.querySelectorAll('.book-row');
+
+            rows.forEach(row => {
+                const title = row.querySelector('.book-title').textContent.toLowerCase();
+                const author = row.querySelector('.author-name').textContent.toLowerCase();
+                const category = row.querySelector('.category-badge')?.textContent || '';
+                
+                const matchesSearch = title.includes(searchTerm) || author.includes(searchTerm);
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+                
+                row.style.display = matchesSearch && matchesCategory ? '' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>
